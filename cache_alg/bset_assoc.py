@@ -55,19 +55,26 @@ class BlockSetAssociative(ReplAlgo):
         'data': [None for i in range(self.n_blocks)]
       })  
 
-  def print_cache(self):
+  def print_cache(self, algo='lru'):
     print('************************************************')
     for set_num in range(self.n_sets):
       print('Set:', set_num)
-      print('block\t|\tage\t|\tdata\t')
+      if algo == 'lru':
+        print('block\t|\tage\t|\tdata\t')
+      elif algo == 'mru':
+        print('block\t|\tdata\t')
+
       print('--------------------------------------')
       for b in range(self.n_blocks):
-        print(f'{b}\t|\t{self.cache[set_num]["age"][b]}\t|\t{self.cache[set_num]["data"][b]}')
+        if algo == 'lru':
+          print(f'{b}\t|\t{self.cache[set_num]["age"][b]}\t|\t{self.cache[set_num]["data"][b]}')
+        elif algo == 'mru':
+          print(f'{b}\t|\t{self.cache[set_num]["data"][b]}')
       print('\n')
     print('************************************************')
     print('\n\n')
     
-  def perform(self):
+  def lru(self):
     for n in self.num_list:
       set_num = n % self.n_sets
 
@@ -106,3 +113,30 @@ class BlockSetAssociative(ReplAlgo):
 
     print('*************** Final ***************\n')
     self.print_cache()
+
+  def mru(self):
+    last_touch = 0
+    for n in self.num_list:
+      set_num = n % self.n_sets
+      if n in self.cache[set_num]['data']:
+        if self.debug:
+          print('Hit!')
+        last_touch = self.cache[set_num]['data'].index(n)
+
+      else:
+        if self.debug:
+          print('Miss...')
+        if not self.is_full(self.cache[set_num]['data']):
+          emp = self.get_empty_space(self.cache[set_num]['data'])
+          self.cache[set_num]['data'][emp] = n
+          last_touch = emp
+          
+        else:
+          self.cache[set_num]['data'][last_touch] = n
+
+      if self.debug:
+        print('n: ', n)
+        self.print_cache('mru')
+
+    print('*************** Final ***************\n')
+    self.print_cache('mru')
