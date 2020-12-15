@@ -27,9 +27,11 @@ class LRU(ReplAlgo):
 
   def perform(self):
     for n in self.num_list:
-      if n in self.data:            # 1
+      if n in self.data:
         if self.debug:
           print('Hit!')
+
+        self.hits += 1
         ind = self.data.index(n)
         for a in range(len(self.data)):
           if self.age[a] < self.age[ind]:
@@ -40,14 +42,16 @@ class LRU(ReplAlgo):
       else:
         if self.debug:
           print('Miss...')
-        if not self.is_full(self.data):          # 2
+
+        self.misses += 1
+        if not self.is_full(self.data):
           emp = self.get_empty_space(self.data)
           for a in range(emp):
             self.age[a] += 1
           self.data[emp] = n
           self.age[emp] = 0
           
-        else:                           # 3
+        else:
           ind_oldest = self.age.index(max(self.age))
           self.age[ind_oldest] = 0
           for a in range(len(self.age)):

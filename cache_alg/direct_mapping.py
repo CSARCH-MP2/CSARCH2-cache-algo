@@ -6,13 +6,18 @@ class DirectMapping(ReplAlgo):
     print('---------------------')
     for b in range(self.n_blocks):
       print(f'{b}\t|\t{self.data[b]}')
-
     print('\n\n')
 
   def perform(self):
     for n in self.num_list:
       if self.debug:
         print('n: ', n)
+
+      if n in self.data:
+        self.hits += 1
+      else: 
+        self.misses += 1
+
       self.data[n % self.n_blocks] = n
       if self.debug:
         self.print_cache()

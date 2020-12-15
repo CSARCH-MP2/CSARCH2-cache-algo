@@ -27,24 +27,8 @@ ex:
 1 2 3 4 5 4 3 1 2 5
 '''
 
-
 class BlockSetAssociative(ReplAlgo):
-  '''
-  Rules for LRU:
-    1. if n in cache:
-      update all younger ages in the set by 1
-      reset focused to 0
-    else:
-      2. if n not in cache and cache not full:
-        update all ages by 1
-        insert data to next dict
-      3. if not in cache and cache full:
-        find data with max age
-        replace that age with 0
-        update all ages by 1
-        insert data in pos
-  '''
-  
+
   def __init__(self, n_sets, n_blocks, num_list, debug=False):
     super(BlockSetAssociative, self).__init__(n_blocks, num_list, debug)
     self.n_sets = n_sets
@@ -81,7 +65,7 @@ class BlockSetAssociative(ReplAlgo):
       if n in self.cache[set_num]['data']:
         if self.debug:
           print('Hit!')
-          
+        self.hits += 1  
         ind = self.cache[set_num]['data'].index(n)
         for a in range(len(self.cache[set_num]['data'])):
           if self.cache[set_num]['age'][a] < self.cache[set_num]['age'][ind]:
@@ -92,6 +76,8 @@ class BlockSetAssociative(ReplAlgo):
       else:
         if self.debug:
           print('Miss...')
+
+        self.misses += 1
         if not self.is_full(self.cache[set_num]['data']):
           emp = self.get_empty_space(self.cache[set_num]['data'])
           for a in range(emp):
@@ -121,11 +107,15 @@ class BlockSetAssociative(ReplAlgo):
       if n in self.cache[set_num]['data']:
         if self.debug:
           print('Hit!')
+
+        self.hits += 1
         last_touch = self.cache[set_num]['data'].index(n)
 
       else:
         if self.debug:
           print('Miss...')
+
+        self.misses += 1
         if not self.is_full(self.cache[set_num]['data']):
           emp = self.get_empty_space(self.cache[set_num]['data'])
           self.cache[set_num]['data'][emp] = n

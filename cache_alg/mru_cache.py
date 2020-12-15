@@ -15,11 +15,15 @@ class MRU(ReplAlgo):
       if n in self.data:
         if self.debug:
           print('Hit!')
+
+        self.hits += 1
         last_touch = self.data.index(n)
 
       else:
         if self.debug:
           print('Miss...')
+
+        self.misses += 1
         if not self.is_full(self.data):
           emp = self.get_empty_space(self.data)
           self.data[emp] = n
