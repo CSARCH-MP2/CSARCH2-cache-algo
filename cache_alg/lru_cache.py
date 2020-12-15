@@ -17,6 +17,14 @@ class LRU(ReplAlgo):
         insert data in pos
   '''
   
+  def print_cache(self):
+    print('block\t|\tage\t|\tdata\t')
+    print('--------------------------------------')
+    for b in range(self.n_blocks):
+      print(f'{b}\t|\t{self.age[b]}\t|\t{self.data[b]}')
+
+    print('\n\n')
+
   def perform(self):
     for n in self.num_list:
       if n in self.data:            # 1

@@ -7,7 +7,6 @@ class MRU(ReplAlgo):
     print('---------------------')
     for b in range(self.n_blocks):
       print(f'{b}\t|\t{self.data[b]}')
-
     print('\n\n')
 
   def perform(self):

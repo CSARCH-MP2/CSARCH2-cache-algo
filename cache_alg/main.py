@@ -22,15 +22,16 @@ from lru_cache import LRU
 from mru_cache import MRU
 from direct_mapping import DirectMapping
 
+
 n_blocks = int(input())
 input_string = input()
 num_list = [int(i) for i in input_string.split(' ')]
 
 lru = LRU(n_blocks, num_list, debug=False)
-# lru.perform()
+lru.perform()
 
 mru = MRU(n_blocks, num_list, debug=True)
 # mru.perform()
 
 dm = DirectMapping(n_blocks, num_list, debug=True)
-dm.perform()
+# dm.perform()

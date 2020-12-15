@@ -7,26 +7,21 @@ class ReplAlgo:
     self.debug = debug
 
   def is_full(self, data):
-    for i in self.data:
+    for i in data:
       if i == None:
         return False
     return True
 
   def get_empty_space(self, data):
     ind = 0
-    for i in self.data:
+    for i in data:
       if i == None:
         return ind
       ind += 1
     return -1
 
   def print_cache(self):
-    print('block\t|\tage\t|\tdata\t')
-    print('--------------------------------------')
-    for b in range(self.n_blocks):
-      print(f'{b}\t|\t{self.age[b]}\t|\t{self.data[b]}')
-
-    print('\n\n')
+    pass
 
   def perform(self):
     pass  
