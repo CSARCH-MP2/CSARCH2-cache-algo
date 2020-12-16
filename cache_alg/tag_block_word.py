@@ -17,7 +17,7 @@ class TagBlockWord():
     self.method = method
 
   def get_mm_bits(self):
-    return np.log2(self.n_mem_words)
+    return int(np.log2(self.n_mem_words))
 
   def get_tag(self):
     if self.method == 'bset':
@@ -29,19 +29,23 @@ class TagBlockWord():
 
   def get_block(self):
     if self.method == 'direct':
-      return np.log2(self.n_cache_blocks)
+      return int(np.log2(self.n_cache_blocks))
+    return 'No block - Not a direct-mapped cache'
 
   def get_word(self):
-    return np.log2(self.n_cache_blocks)
+    return int(np.log2(self.n_words_per_block))
 
   def get_set(self):
     if self.method == 'bset':
-      sets = self.n_blocks // self.n_way
-      return np.log2(sets)
+      sets = self.n_cache_blocks // self.n_way
+      return int(np.log2(sets))
+
+    return 'No set - Not a block set-associative cache'
 
   def print_id(self):
+    print('MM Bits', self.get_mm_bits())
     print('Tag: ', self.get_tag())
     print('Block: ', self.get_block())
-    print('Word: ', self.get_word())
+    print('Set: ', self.get_set())
     print('Word: ', self.get_word())
 
