@@ -36,7 +36,14 @@ class ReplAlgo:
     else:
       return self.t_cache + self.t_mem 
 
-  def get_total_time(self):
+  def get_total_time_lt(self):
+    t_hits = self.hits * self.n_words * self.t_cache
+    t_miss = self.misses * self.n_words * self.t_mem
+    t_cache_probe_if_miss = self.misses * self.t_cache
+    
+    return t_hits + t_miss + t_cache_probe_if_miss
+
+  def get_total_time_nlt(self):
     t_hits = self.hits * self.n_words * self.t_cache
     t_miss = self.misses * self.n_words * (self.t_mem + self.t_cache)
     t_cache_probe_if_miss = self.misses * self.t_cache
@@ -48,17 +55,18 @@ class ReplAlgo:
 
   def get_avg_time(self):
     # hC + h'M
-    return self.hits * self.t_cache + (1 - self.get_hit_rate()) * self.get_miss_penalty()
+    return self.get_hit_rate() * self.t_cache + (1 - self.get_hit_rate()) * self.get_miss_penalty()
 
   def print_stats(self):
     print('----- Statistics -----')
-    print('Total time:\t\t', self.get_total_time(), 'ns')
-    print('Average time:\t\t', self.get_avg_time(), 'ns')
-    print('Hits:\t\t\t', self.hits)
-    print('Misses:\t\t\t', self.misses)
-    print('Hit Rate:\t\t', self.get_hit_rate() * 100, '%')
-    print('Miss Rate:\t\t', (1 - self.get_hit_rate()) * 100, '%')
-    print('Miss Penalty:\t\t', self.get_miss_penalty(), 'ns')
+    print('Total time (LT):\t\t', self.get_total_time_lt(), 'ns')
+    print('Total time (NLT):\t\t', self.get_total_time_nlt(), 'ns')
+    print('Average time:\t\t\t', self.get_avg_time(), 'ns')
+    print('Hits:\t\t\t\t', self.hits)
+    print('Misses:\t\t\t\t', self.misses)
+    print('Hit Rate:\t\t\t', self.get_hit_rate() * 100, '%')
+    print('Miss Rate:\t\t\t', (1 - self.get_hit_rate()) * 100, '%')
+    print('Miss Penalty:\t\t\t', self.get_miss_penalty(), 'ns')
 
   def print_cache(self):
     pass

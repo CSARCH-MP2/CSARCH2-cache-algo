@@ -1,4 +1,4 @@
-from repl_algo import ReplAlgo
+from cache_alg.repl_algo import ReplAlgo
 
 '''
 set 0
@@ -29,8 +29,8 @@ ex:
 
 class BlockSetAssociative(ReplAlgo):
 
-  def __init__(self, n_sets, n_blocks, num_list, debug=False):
-    super(BlockSetAssociative, self).__init__(n_blocks, num_list, debug)
+  def __init__(self, n_sets, n_blocks, num_list, n_words, debug=False):
+    super(BlockSetAssociative, self).__init__(n_blocks, num_list, n_words, debug=debug)
     self.n_sets = n_sets
     self.cache = []
     for n in range(n_sets):

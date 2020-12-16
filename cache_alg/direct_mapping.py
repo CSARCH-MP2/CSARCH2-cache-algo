@@ -1,4 +1,4 @@
-from repl_algo import ReplAlgo
+from cache_alg.repl_algo import ReplAlgo
 
 class DirectMapping(ReplAlgo):
   def print_cache(self):
