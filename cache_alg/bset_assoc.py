@@ -29,8 +29,8 @@ ex:
 
 class BlockSetAssociative(ReplAlgo):
 
-  def __init__(self, n_sets, n_blocks, num_list, n_words, debug=False):
-    super(BlockSetAssociative, self).__init__(n_blocks, num_list, n_words, debug=debug)
+  def __init__(self, n_sets, n_blocks, num_list, n_words, t_cache, t_mem, debug=False):
+    super(BlockSetAssociative, self).__init__(n_blocks, num_list, n_words, t_cache, t_mem, debug=debug)
     self.n_sets = n_sets
     self.cache = []
     for n in range(n_sets):

@@ -1,4 +1,4 @@
-mm_blocks: 16
-wordsperblock: 2
-bitsperword: 16
-c_blocks: 4
+mem_blocks: 16
+cache_blocks: 4
+words_per_block: 2
+bits_per_word: 16
