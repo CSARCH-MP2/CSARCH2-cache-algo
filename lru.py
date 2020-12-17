@@ -1,6 +1,6 @@
 from cache_alg.lru_cache import LRU
 
-lines = open('./inputs/fa_input.txt', 'r').read().splitlines()
+lines = open('./inputs/in.txt', 'r').read().splitlines()
 n_blocks = int(lines[0].split(' ')[1])
 words_per_block = int(lines[1].split(' ')[1])
 num_list = [int(i) for i in lines[2:]]

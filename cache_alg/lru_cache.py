@@ -33,7 +33,7 @@ class LRU(ReplAlgo):
 
         self.hits += 1
         ind = self.data.index(n)
-        for a in range(len(self.data)):
+        for a in range(len(self.data)):               # Update all younger blocks
           if self.age[a] < self.age[ind]:
             self.age[a] += 1
 
@@ -46,18 +46,18 @@ class LRU(ReplAlgo):
         self.misses += 1
         if not self.is_full(self.data):
           emp = self.get_empty_space(self.data)
-          for a in range(emp):
+          for a in range(emp):                        # Update all previous ages
             self.age[a] += 1
-          self.data[emp] = n
-          self.age[emp] = 0
+          self.data[emp] = n                          # Put the value in the empty position
+          self.age[emp] = 0                           # Set the age to 0
           
         else:
-          ind_oldest = self.age.index(max(self.age))
-          self.age[ind_oldest] = 0
-          for a in range(len(self.age)):
+          ind_oldest = self.age.index(max(self.age))  # Get the position of the oldest cache 
+          self.age[ind_oldest] = 0                    # Set the age of the oldest to 0
+          for a in range(len(self.age)):              # Update all other ages by 1
             if a != ind_oldest:
               self.age[a] += 1
-          self.data[ind_oldest] = n
+          self.data[ind_oldest] = n                   # Set the block of the lru cache to the incoming block
 
       if self.debug:
         print('n: ', n)
