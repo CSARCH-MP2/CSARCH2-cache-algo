@@ -1,6 +1,6 @@
 from cache_alg.lru_cache import LRU
 
-lines = open('./inputs/exercises/custom_time/0.txt', 'r').read().splitlines()
+lines = open('./0.txt', 'r').read().splitlines()
 t_cache          = int(lines[0].split(' ')[1])
 t_mem            = int(lines[1].split(' ')[1])
 sets             = int(lines[2].split(' ')[1])
@@ -18,5 +18,10 @@ lru = LRU(
   t_mem=t_mem,
   debug=False)
 
-lru.perform()
-lru.print_stats()
+for i in range(5):
+  print(f'\n\nIteration: {i}')
+  lru.perform()
+  lru.print_stats()
+
+  lru.hits = 0
+  lru.misses = 0

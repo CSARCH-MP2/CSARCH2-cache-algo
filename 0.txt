@@ -1,0 +1,15 @@
+t_cache: 1
+t_mem: 10
+sets: 4
+n_blocks_per_set: 2
+words_per_block: 4
+11
+17
+15
+10
+19
+17
+11
+15
+20
+20

@@ -3,7 +3,7 @@ from cache_alg.lru_cache import LRU
 from cache_alg.mru_cache import MRU
 from cache_alg.bset_assoc import BlockSetAssociative
 
-lines = open('./inputs/exercises/custom_time/6.txt', 'r').read().splitlines()
+lines = open('./question7.txt', 'r').read().splitlines()
 t_cache          = int(lines[0].split(' ')[1])
 t_mem            = int(lines[1].split(' ')[1])
 sets             = int(lines[2].split(' ')[1])
@@ -20,10 +20,12 @@ dm = DirectMapping(
   t_mem=t_mem,
   debug=False)
 
-print('******************* Direct Mapping *******************')
+print('########################################################')
+print('###############      Direct Mapping      ###############')
+print('########################################################')
 dm.perform()
 dm.print_stats()
-print('\n-----------------------------------------------------\n')
+
 
 lru = LRU(
   n_blocks=total_blocks, 
@@ -33,10 +35,13 @@ lru = LRU(
   t_mem=t_mem,
   debug=False)
 
-print('******************* Full Assoc LRU *******************')
+print('\n')
+print('########################################################')
+print('###########      Full Associative - LRU      ###########')
+print('########################################################')
 lru.perform()
 lru.print_stats()
-print('\n-----------------------------------------------------\n')
+
 
 mru = MRU(
   total_blocks, 
@@ -46,10 +51,13 @@ mru = MRU(
   t_mem=t_mem,
   debug=False)
 
-print('******************* Full Assoc MRU *******************')
+print('\n')
+print('########################################################')
+print('###########      Full Associative - MRU      ###########')
+print('########################################################')
 mru.perform()
 mru.print_stats()
-print('\n-----------------------------------------------------\n')
+
 
 bs = BlockSetAssociative(
   n_sets=sets, 
@@ -60,10 +68,13 @@ bs = BlockSetAssociative(
   t_mem=t_mem,
   debug=False)
 
-print('******************* Block Set LRU *******************')
+print('\n')
+print('########################################################')
+print('###########         Block Set - LRU          ###########')
+print('########################################################')
 bs.lru()
 bs.print_stats()
-print('\n-----------------------------------------------------\n')
+
 
 bs = BlockSetAssociative(
   n_sets=sets, 
@@ -74,7 +85,9 @@ bs = BlockSetAssociative(
   t_mem=t_mem,
   debug=False)
 
-print('******************* Block Set MRU *******************')
+print('\n')
+print('########################################################')
+print('###########         Block Set - MRU          ###########')
+print('########################################################')
 bs.mru()
 bs.print_stats()
-print('\n-----------------------------------------------------\n')

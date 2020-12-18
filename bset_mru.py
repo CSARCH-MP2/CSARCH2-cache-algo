@@ -1,6 +1,6 @@
 from cache_alg.bset_assoc import BlockSetAssociative
 
-lines = open('./inputs/exercises/custom_time/0.txt', 'r').read().splitlines()
+lines = open('./0.txt', 'r').read().splitlines()
 t_cache          = int(lines[0].split(' ')[1])
 t_mem            = int(lines[1].split(' ')[1])
 sets             = int(lines[2].split(' ')[1])

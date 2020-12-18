@@ -1,14 +1,20 @@
-n_blocks: 8
-words_per_block: 4
-0
-1
-2
-3
-61
-60
-0
-1
-6
+t_cache: 3
+t_mem: 65
+sets: 2
+n_blocks_per_set: 3
+words_per_block: 3
 7
-19
-61
+8
+4
+7
+7
+4
+7
+7
+6
+5
+8
+4
+1
+4
+3

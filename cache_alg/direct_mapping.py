@@ -6,7 +6,7 @@ class DirectMapping(ReplAlgo):
     print('---------------------')
     for b in range(self.n_blocks):
       print(f'{b}\t|\t{self.data[b]}')
-    print('\n\n')
+    print('\n')
 
   def perform(self):
     for n in self.num_list:

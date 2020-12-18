@@ -1,6 +1,6 @@
 from cache_alg.mru_cache import MRU
 
-lines = open('./inputs/exercises/custom_time/0.txt', 'r').read().splitlines()
+lines = open('./0.txt', 'r').read().splitlines()
 t_cache          = int(lines[0].split(' ')[1])
 t_mem            = int(lines[1].split(' ')[1])
 sets             = int(lines[2].split(' ')[1])
@@ -18,5 +18,7 @@ mru = MRU(
   t_mem=t_mem,
   debug=False)
 
+# for i in range(5):
+#   print(f'\n\nIteration: {i}')
 mru.perform()
 mru.print_stats()

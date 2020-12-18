@@ -36,7 +36,8 @@ class BlockSetAssociative(ReplAlgo):
     for n in range(n_sets):
       self.cache.append({
         'age': [0 for i in range(self.n_blocks)],
-        'data': [None for i in range(self.n_blocks)]
+        'data': [None for i in range(self.n_blocks)],
+        'last_touch': [-1 for i in range(self.n_blocks)]
       })  
 
   def print_cache(self, algo='lru'):
@@ -56,7 +57,7 @@ class BlockSetAssociative(ReplAlgo):
           print(f'{b}\t|\t{self.cache[set_num]["data"][b]}')
       print('\n')
     print('************************************************')
-    print('\n\n')
+    print('\n')
     
   def lru(self):
     for n in self.num_list:
@@ -101,7 +102,6 @@ class BlockSetAssociative(ReplAlgo):
     self.print_cache()
 
   def mru(self):
-    last_touch = 0
     for n in self.num_list:
       set_num = n % self.n_sets
       if n in self.cache[set_num]['data']:
@@ -109,7 +109,7 @@ class BlockSetAssociative(ReplAlgo):
           print('Hit!')
 
         self.hits += 1
-        last_touch = self.cache[set_num]['data'].index(n)
+        self.cache[set_num]['last_touch'] = self.cache[set_num]['data'].index(n)
 
       else:
         if self.debug:
@@ -119,10 +119,11 @@ class BlockSetAssociative(ReplAlgo):
         if not self.is_full(self.cache[set_num]['data']):
           emp = self.get_empty_space(self.cache[set_num]['data'])
           self.cache[set_num]['data'][emp] = n
-          last_touch = emp
+          self.cache[set_num]['last_touch'] = emp
           
         else:
-          self.cache[set_num]['data'][last_touch] = n
+          lt = self.cache[set_num]['last_touch']
+          self.cache[set_num]['data'][lt] = n
 
       if self.debug:
         print('n: ', n)
