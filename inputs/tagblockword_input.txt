@@ -1,4 +1,0 @@
-mem_blocks: 16
-cache_blocks: 4
-words_per_block: 2
-bits_per_word: 16
