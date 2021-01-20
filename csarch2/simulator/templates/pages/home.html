@@ -9,13 +9,13 @@
 <br>
 <div class="d-flex justify-content-center container">
     <div class ="col">
-        <form method = "POST"> {% csrf_token %}
+        <form name ="first" method = "POST"> {% csrf_token %}
             <div class="row">
                 <div class = "col">
                     <h4>Cache Access Time:</h4>
                 </div>
                 <div class = "col">
-                    <input type = "number" id = "cache_access_time" name = "cache_access_time">
+                    <input type = "number" id = "cache_access_time" name = "cache_access_time" min="1" required>
                 </div>
             </div>
             <div class="row">
@@ -23,7 +23,7 @@
                     <h4>Memory Access Time:</h4>
                 </div>
                 <div class = "col">
-                    <input type = "number" id = "memory_access_time" name = "memory_access_time">
+                    <input type = "number" id = "memory_access_time" name = "memory_access_time" min="1" required>
                 </div>
             </div>
             <div class="row">
@@ -31,7 +31,7 @@
                     <h4>Sets:</h4>
                 </div>
                 <div class = "col">
-                    <input type = "number" id = "sets" name = "sets">
+                    <input type = "number" id = "sets" name = "sets" min="1" required>
                 </div>
             </div>
             <div class="row">
@@ -39,7 +39,7 @@
                     <h4>Blocks per set:</h4>
                 </div>
                 <div class = "col">
-                    <input type = "number" id = "blocks_per_set" name = "blocks_per_set">
+                    <input type = "number" id = "blocks_per_set" name = "blocks_per_set" min="1" required>
                 </div>
             </div>
             <div class="row">
@@ -47,7 +47,15 @@
                     <h4>Words per Block:</h4>
                 </div>
                 <div class = "col">
-                    <input type = "number" id = "words_per_block" name = "words_per_block">
+                    <input type = "number" id = "words_per_block" name = "words_per_block" min="1" required>
+                </div>
+            </div>
+            <div class="row">
+                <div class = "col">
+                    <h4>Iteration:</h4>
+                </div>
+                <div class = "col">
+                    <input type = "number" id = "iteration" name = "iteration" min="1" required>
                 </div>
             </div>
             <div class="row">
@@ -55,7 +63,7 @@
                     <h4>Input (enter each value in newline):</h4>
                 </div>
                 <div class = "col">
-                    <textarea id ="input" name = "input"></textarea>
+                    <textarea id ="input" name = "input" required></textarea>
                 </div>
             </div>
             <div class = row>
@@ -69,7 +77,7 @@
         </div>
         <div class = "container text-center" id="empty_message">
             <!-- OUTPUT HERE -->
-            <form method="GET"> 
+            <form method="POST">{% csrf_token %}
                 <input type="submit" value="Download">
             </form>
         </div>
