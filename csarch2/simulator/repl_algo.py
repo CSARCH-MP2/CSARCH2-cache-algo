@@ -58,15 +58,26 @@ class ReplAlgo:
     return self.get_hit_rate() * self.t_cache + (1 - self.get_hit_rate()) * self.get_miss_penalty()
 
   def print_stats(self):
+    stats = ""
+    stats += '----- Statistics -----\n'
     print('----- Statistics -----')
     print('Total time (LT):\t\t', self.get_total_time_lt(), 'ns')
+    stats = stats + 'Total time (LT):\t\t' + str(self.get_total_time_lt()) + 'ns\n'
     print('Total time (NLT):\t\t', self.get_total_time_nlt(), 'ns')
+    stats = stats + 'Total time (NLT):\t\t'+str(self.get_total_time_nlt())+ 'ns\n'
     print('Average time:\t\t\t', self.get_avg_time(), 'ns')
+    stats =  stats + 'Average time:\t\t\t' + str(self.get_avg_time()) + 'ns\n'
     print('Hits:\t\t\t\t', self.hits)
+    stats =  stats + 'Hits:\t\t\t\t' + str(self.hits) +'\n'
     print('Misses:\t\t\t\t', self.misses)
+    stats =  stats + 'Misses:\t\t\t\t' + str(self.misses) + '\n'
     print('Hit Rate:\t\t\t', self.get_hit_rate() * 100, '%')
+    stats = stats + 'Hit Rate:\t\t\t'+ str(self.get_hit_rate() * 100) +'%\n'
     print('Miss Rate:\t\t\t', (1 - self.get_hit_rate()) * 100, '%')
+    stats = stats + 'Miss Rate:\t\t\t'+ str((1 - self.get_hit_rate()) * 100) +'%\n'
     print('Miss Penalty:\t\t\t', self.get_miss_penalty(), 'ns')
+    stats = stats + 'Miss Penalty:\t\t\t' + str(self.get_miss_penalty()) + 'ns\n'
+    return stats
 
   def print_cache(self):
     pass

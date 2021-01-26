@@ -2,11 +2,15 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from .bset_assoc import BlockSetAssociative
 
+save = [] #holder for download
+
 # Create your views here.
 def index(request):
   if request.method == "POST":
     #compute
     if request.POST.get('cache_access_time'):
+      global save
+      save.clear() 
       t_cache          = int(request.POST.get('cache_access_time'))
       t_mem            = int(request.POST.get('memory_access_time'))
       sets             = int(request.POST.get('sets'))
@@ -26,14 +30,18 @@ def index(request):
       #TODO: convert to print on screen, add error checking
       for i in range(iterations):
         print(f'\n\nIteration: {i}')
+        if(i != 0):
+          save.append('\n\n')
+        save.append(f'Iteration: {i}'+'\n')
         bs.lru()
-        bs.print_stats()
+        save.append(bs.print_cache())
+        save.append(bs.print_stats())
         bs.hits = 0
         bs.misses = 0
-      #download
+    #download
     else: 
-      file_data = "some text"
+      file_data = save
       response = HttpResponse(file_data, content_type='application/text charset=utf-8')
-      response['Content-Disposition'] = 'attachment; filename="foo.txt"'
+      response['Content-Disposition'] = 'attachment; filename="BSA_LRU_answer.txt"'
       return response
   return render(request, 'pages/home.html')

@@ -41,24 +41,32 @@ class BlockSetAssociative(ReplAlgo):
       })  
 
   def print_cache(self, algo='lru'):
+    cache = "*************** Final ***************\n\n************************************************\n"
     print('************************************************')
     for set_num in range(self.n_sets):
+      cache = cache + 'Set:' + str(set_num) +'\n'
       print('Set:', set_num)
       if algo == 'lru':
         print('block\t|\tage\t|\tdata\t')
+        cache += 'block\t|\tage\t|\tdata\t\n'
       elif algo == 'mru':
         print('block\t|\tdata\t')
 
+      cache += '--------------------------------------\n'
       print('--------------------------------------')
       for b in range(self.n_blocks):
         if algo == 'lru':
           print(f'{b}\t|\t{self.cache[set_num]["age"][b]}\t|\t{self.cache[set_num]["data"][b]}')
+          cache = cache + str(f'{b}\t|\t{self.cache[set_num]["age"][b]}\t|\t{self.cache[set_num]["data"][b]}') + '\n'
         elif algo == 'mru':
           print(f'{b}\t|\t{self.cache[set_num]["data"][b]}')
-      print('\n')
+      cache+='\n'
+      print('\n') 
+    cache += '************************************************\n\n'
     print('************************************************')
     print('\n')
-    
+    return cache
+
   def lru(self):
     for n in self.num_list:
       set_num = n % self.n_sets
