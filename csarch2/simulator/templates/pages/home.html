@@ -1,87 +1,121 @@
-{% extends '../partials/base.html' %}
-
+{% extends '../partials/base.html' %} 
+{% load static %}
 {% block body %}
 <nav class="navbar navbar-dark bg-primary">
-    <div class="container-fluid">
-        <span class="navbar-brand">Block Set Associative - LRU</span>
-    </div>
+  <div class="container-fluid">
+    <span class="navbar-brand">Block Set Associative - LRU</span>
+  </div>
 </nav>
-<br>
+<br />
 <div class="d-flex justify-content-center container">
-    <div class ="col">
-        <form name ="first" method = "POST"> {% csrf_token %}
-            <div class="row">
-                <div class = "col">
-                    <h4>Cache Access Time:</h4>
-                </div>
-                <div class = "col">
-                    <input type = "number" id = "cache_access_time" name = "cache_access_time" min="1" required>
-                </div>
-            </div>
-            <div class="row">
-                <div class = "col">
-                    <h4>Memory Access Time:</h4>
-                </div>
-                <div class = "col">
-                    <input type = "number" id = "memory_access_time" name = "memory_access_time" min="1" required>
-                </div>
-            </div>
-            <div class="row">
-                <div class = "col">
-                    <h4>Sets:</h4>
-                </div>
-                <div class = "col">
-                    <input type = "number" id = "sets" name = "sets" min="1" required>
-                </div>
-            </div>
-            <div class="row">
-                <div class = "col">
-                    <h4>Blocks per set:</h4>
-                </div>
-                <div class = "col">
-                    <input type = "number" id = "blocks_per_set" name = "blocks_per_set" min="1" required>
-                </div>
-            </div>
-            <div class="row">
-                <div class = "col">
-                    <h4>Words per Block:</h4>
-                </div>
-                <div class = "col">
-                    <input type = "number" id = "words_per_block" name = "words_per_block" min="1" required>
-                </div>
-            </div>
-            <div class="row">
-                <div class = "col">
-                    <h4>Iteration:</h4>
-                </div>
-                <div class = "col">
-                    <input type = "number" id = "iteration" name = "iteration" min="1" required>
-                </div>
-            </div>
-            <div class="row">
-                <div class = "col">
-                    <h4>Input (enter each value in newline):</h4>
-                </div>
-                <div class = "col">
-                    <textarea id ="input" name = "input" required></textarea>
-                </div>
-            </div>
-            <div class = row>
-                <input type = "submit" id = "submit" value= "Simulate!">
-            </div>
-        </form>
-    </div>
-    <div class ="col-8 span">
-        <div class = "container" id="empty_message">
-            <h4 class="text-center">No output yet</h4>
+  <div class="col">
+    <form name="first" method="POST">
+      {% csrf_token %}
+      <div class="row">
+        <div class="col">
+          <h4>Cache Access Time:</h4>
         </div>
-        <div class = "container text-center" id="empty_message">
-            <!-- OUTPUT HERE -->
-            <form method="POST">{% csrf_token %}
-                <input type="submit" value="Download">
-            </form>
+        <div class="col">
+          <input
+            type="number"
+            id="cache_access_time"
+            name="cache_access_time"
+            min="1"
+            required
+          />
         </div>
+      </div>
+      <div class="row">
+        <div class="col">
+          <h4>Memory Access Time:</h4>
+        </div>
+        <div class="col">
+          <input
+            type="number"
+            id="memory_access_time"
+            name="memory_access_time"
+            min="1"
+            required
+          />
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+          <h4>Sets:</h4>
+        </div>
+        <div class="col">
+          <input type="number" id="sets" name="sets" min="1" required />
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+          <h4>Blocks per set:</h4>
+        </div>
+        <div class="col">
+          <input
+            type="number"
+            id="blocks_per_set"
+            name="blocks_per_set"
+            min="1"
+            required
+          />
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+          <h4>Words per Block:</h4>
+        </div>
+        <div class="col">
+          <input
+            type="number"
+            id="words_per_block"
+            name="words_per_block"
+            min="1"
+            required
+          />
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+          <h4>Iteration:</h4>
+        </div>
+        <div class="col">
+          <input
+            type="number"
+            id="iteration"
+            name="iteration"
+            min="1"
+            required
+          />
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+          <h4>Input (enter each value in newline):</h4>
+        </div>
+        <div class="col">
+          <textarea id="input" name="input" required></textarea>
+        </div>
+      </div>
+      <div class="row">
+        <input type="submit" id="submit" value="Simulate!" />
+      </div>
+    </form>
+  </div>
+  <div class="col-8 span">
+    <div class="container" id="empty_message">
+      <h4 class="text-center">No output yet</h4>
     </div>
+    <div class="container text-center" id="empty_message">
+      <!-- OUTPUT HERE -->
+      <form method="POST">
+        {% csrf_token %}
+        <input type="submit" value="Download" />
+      </form>
+    </div>
+  </div>
 </div>
-
+{% endblock %}
+{% block scripts %}
+<script src="{% static 'js/home.js' %}"></script>
 {% endblock %}
