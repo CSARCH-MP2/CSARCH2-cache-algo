@@ -98,7 +98,7 @@
         </div>
       </div>
       <div class="row">
-        <input type="submit" id="submit" value="Simulate!" />
+        <button type="submit" id="submitBtn" name="submit_btn">Simulate</button>
       </div>
     </form>
   </div>
@@ -110,7 +110,7 @@
       <!-- OUTPUT HERE -->
       <form method="POST">
         {% csrf_token %}
-        <input type="submit" value="Download" />
+        <button type="submit" value="Download" />
       </form>
     </div>
   </div>
@@ -118,4 +118,11 @@
 {% endblock %}
 {% block scripts %}
 <script src="{% static 'js/home.js' %}"></script>
+<script>
+  $("#submitBtn").on("click", function () {
+    $.get('/perform', function (data) {
+      console.log(data);
+    })
+  });
+</script>
 {% endblock %}

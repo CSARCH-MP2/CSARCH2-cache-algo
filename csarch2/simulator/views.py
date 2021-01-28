@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponse
+from django.http import JsonResponse
 from .bset_assoc import BlockSetAssociative
 
 save = [] #holder for download
@@ -45,3 +46,10 @@ def index(request):
       response['Content-Disposition'] = 'attachment; filename="BSA_LRU_answer.txt"'
       return response
   return render(request, 'pages/home.html')
+
+def perform_bsa_lru(request):
+  sample_data = {
+    'hello': 'world'
+  }
+  return JsonResponse(sample_data)
+  
