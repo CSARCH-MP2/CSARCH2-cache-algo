@@ -9,7 +9,7 @@
 <br />
 <div class="d-flex justify-content-center container">
   <div class="col">
-    <form name="first" method="POST">
+    <form name="input_form" id="inputForm" method="POST">
       {% csrf_token %}
       <div class="row">
         <div class="col">
@@ -107,20 +107,35 @@
       <h4 class="text-center">No output yet</h4>
     </div>
     <div class="container text-center" id="empty_message">
+      <div id="output"></div>
       <!-- OUTPUT HERE -->
       <form method="POST">
         {% csrf_token %}
-        <button type="submit" value="Download" />
+        <input type="submit" value="Download" />
       </form>
     </div>
   </div>
 </div>
 {% endblock %}
 {% block scripts %}
-<script src="{% static 'js/home.js' %}"></script>
 <script>
-  $("#submitBtn").on("click", function () {
-    $.get('/perform', function (data) {
+  $("#inputForm").on("submit", function (event) {
+    event.preventDefault();
+
+    let serializedData = $(this).serialize();
+    $.post("{% url 'perform' %}", serializedData, function (data) {
+
+      for (const key in data) {
+        console.log(key);
+        console.log(data[key]);
+        $('#output').append(`
+            <div class="d-flex row">
+                <div class="col-2">` + key + `: </div>
+                <div class="col-10">` + data[key] + `</div>
+            </div>
+        `);
+      }
+
       console.log(data);
     })
   });
