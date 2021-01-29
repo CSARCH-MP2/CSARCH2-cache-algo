@@ -91,9 +91,10 @@ def perform_bsa_lru(request):
   return JsonResponse(final_result)
 
 def download(request):
-  global save
-  file_data = save
-  response = HttpResponse(file_data, content_type='application/text charset=utf-8')
-  response['Content-Disposition'] = 'attachment; filename="BSA_LRU_answer.txt"'
-  print(file_data)
-  return response
+  if request.method == "POST":
+    global save
+    file_data = save
+    response = HttpResponse(file_data, content_type='application/text charset=utf-8')
+    response['Content-Disposition'] = 'attachment; filename="BSA_LRU_answer.txt"'
+    print(file_data)
+    return response

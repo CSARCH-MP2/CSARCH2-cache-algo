@@ -115,7 +115,10 @@
         <input type="submit" value="Download" />
       </form>  -->
       <!-- <button id = 'download'>Download</button> -->
-      <a id = 'download'>download</a>
+      <form action="{% url 'download' %}" name="download_form" id="downloadForm" method="POST">
+        {% csrf_token %}
+        <input type="submit" id="download" value="download"/>
+      </form>
     </div>
   </div>
 </div>
