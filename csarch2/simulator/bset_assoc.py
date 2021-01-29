@@ -7,21 +7,17 @@ block | age | data
 1       0       5
 2       3       6
 3       2       8
-
 set 1
 block | age | data
 0       1       4  
 1       0       5
 2       3       6
 3       2       8
-
 ...
-
 Input: 
 num_sets
 num_blocks/set
 data_list
-
 ex: 
 4
 1 2 3 4 5 4 3 1 2 5

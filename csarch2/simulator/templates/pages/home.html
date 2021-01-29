@@ -9,7 +9,7 @@
 <br />
 <div class="d-flex justify-content-center container">
   <div class="col">
-    <form name="first" method="POST">
+    <form name="input_form" id="inputForm" method="POST">
       {% csrf_token %}
       <div class="row">
         <div class="col">
@@ -98,7 +98,7 @@
         </div>
       </div>
       <div class="row">
-        <input type="submit" id="submit" value="Simulate!" />
+        <button type="submit" id="submitBtn" name="submit_btn">Simulate</button>
       </div>
     </form>
   </div>
@@ -107,15 +107,44 @@
       <h4 class="text-center">No output yet</h4>
     </div>
     <div class="container text-center" id="empty_message">
+      <div id="output"></div>
       <!-- OUTPUT HERE -->
-      <form method="POST">
+      <!-- <form method="POST" id = "download">
         {% csrf_token %}
+        <input type="hidden" id="download" name="download" value="download"/>
         <input type="submit" value="Download" />
-      </form>
+      </form>  -->
+      <!-- <button id = 'download'>Download</button> -->
+      <a id = 'download'>download</a>
     </div>
   </div>
 </div>
 {% endblock %}
 {% block scripts %}
-<script src="{% static 'js/home.js' %}"></script>
+<script>
+  $("#inputForm").on("submit", function (event) {
+    event.preventDefault();
+
+    let serializedData = $(this).serialize();
+    $.post("{% url 'perform' %}", serializedData, function (data) {
+
+      for (const key in data) {
+        console.log(key);
+        console.log(data[key]);
+        $('#output').append(`
+            <div class="d-flex row">
+                <div class="col-2">` + key + `: </div>
+                <div class="col-10">` + data[key] + `</div>
+            </div>
+        `);
+      }
+
+      console.log(data);
+    })
+  }),
+  $("#download").on("click", function (event) {
+    // event.preventDefault()
+    $.get("{% url 'download' %}")
+  });
+</script>
 {% endblock %}
