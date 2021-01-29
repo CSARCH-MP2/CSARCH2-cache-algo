@@ -1,153 +1,134 @@
-{% extends '../partials/base.html' %} 
-{% load static %}
-{% block body %}
+{% extends '../partials/base.html' %} {% load static %} {% block body %}
 <nav class="navbar navbar-dark bg-primary">
   <div class="container-fluid">
     <span class="navbar-brand">Block Set Associative - LRU</span>
   </div>
 </nav>
 <br />
-<div class="d-flex justify-content-center container">
-  <div class="col">
-    <form name="input_form" id="inputForm" method="POST">
-      {% csrf_token %}
-      <div class="row">
-        <div class="col">
-          <h4>Cache Access Time:</h4>
+<div class="container-fluid">
+  <div class="d-flex row">
+    <div class="col-lg-5">
+      <form name="input_form" id="inputForm" method="POST">
+        {% csrf_token %}
+        <div class="form-group row mb-2">
+          <label for="cache_access_time" class="col-sm-5 col-form-label">Cache access time (ns)</label>
+          <div class="col-sm-7">
+            <input type="number" class="form-control" id="cache_access_time" name="cache_access_time" min="1" required>
+          </div>
         </div>
-        <div class="col">
-          <input
-            type="number"
-            id="cache_access_time"
-            name="cache_access_time"
-            min="1"
-            required
-          />
+        <div class="form-group row mb-2">
+          <label for="memory_access_time" class="col-sm-5 col-form-label">Memory access time (ns)</label>
+          <div class="col-sm-7">
+            <input type="number" class="form-control" id="memory_access_time" name="memory_access_time" min="1" required>
+          </div>
         </div>
-      </div>
-      <div class="row">
-        <div class="col">
-          <h4>Memory Access Time:</h4>
+        <div class="form-group row mb-2">
+          <label for="sets" class="col-sm-5 col-form-label">Number of sets</label>
+          <div class="col-sm-7">
+            <input type="number" class="form-control" id="sets" name="sets" min="1" required>
+          </div>
         </div>
-        <div class="col">
-          <input
-            type="number"
-            id="memory_access_time"
-            name="memory_access_time"
-            min="1"
-            required
-          />
+        <div class="form-group row mb-2">
+          <label for="blocks_per_set" class="col-sm-5 col-form-label">Blocks per set</label>
+          <div class="col-sm-7">
+            <input type="number" class="form-control" id="blocks_per_set" name="blocks_per_set" min="1" required>
+          </div>
         </div>
-      </div>
-      <div class="row">
-        <div class="col">
-          <h4>Sets:</h4>
+        <div class="form-group row mb-2">
+          <label for="words_per_block" class="col-sm-5 col-form-label">Words per block</label>
+          <div class="col-sm-7">
+            <input type="number" class="form-control" id="words_per_block" name="words_per_block" min="1" required>
+          </div>
         </div>
-        <div class="col">
-          <input type="number" id="sets" name="sets" min="1" required />
+        <div class="form-group row mb-2">
+          <label for="input" class="col-sm-5 col-form-label">Sequence of inputs</label>
+          <div class="col-sm-7">
+            <textarea id="input" name="input" class="form-control" rows="5" placeholder="Enter each value in separate lines" required></textarea>
+          </div>
         </div>
-      </div>
-      <div class="row">
-        <div class="col">
-          <h4>Blocks per set:</h4>
+        <div class="form-group row mb-2">
+          <label for="iteration" class="col-sm-5 col-form-label">Number of iterations</label>
+          <div class="col-sm-7">
+            <input type="number" class="form-control" id="iteration" name="iteration" min="1" value="1" required>
+          </div>
         </div>
-        <div class="col">
-          <input
-            type="number"
-            id="blocks_per_set"
-            name="blocks_per_set"
-            min="1"
-            required
-          />
+        <div class="d-flex mb-5">
+          <button class="btn btn-primary mx-auto" type="submit" id="submitBtn" name="submit_btn">
+            Simulate
+          </button>
         </div>
-      </div>
-      <div class="row">
-        <div class="col">
-          <h4>Words per Block:</h4>
-        </div>
-        <div class="col">
-          <input
-            type="number"
-            id="words_per_block"
-            name="words_per_block"
-            min="1"
-            required
-          />
-        </div>
-      </div>
-      <div class="row">
-        <div class="col">
-          <h4>Iteration:</h4>
-        </div>
-        <div class="col">
-          <input
-            type="number"
-            id="iteration"
-            name="iteration"
-            min="1"
-            required
-          />
-        </div>
-      </div>
-      <div class="row">
-        <div class="col">
-          <h4>Input (enter each value in newline):</h4>
-        </div>
-        <div class="col">
-          <textarea id="input" name="input" required></textarea>
-        </div>
-      </div>
-      <div class="row">
-        <button type="submit" id="submitBtn" name="submit_btn">Simulate</button>
-      </div>
-    </form>
-  </div>
-  <div class="col-8 span">
-    <div class="container" id="empty_message">
-      <h4 class="text-center">No output yet</h4>
+      </form>
     </div>
-    <div class="container text-center" id="empty_message">
-      <div id="output"></div>
-      <!-- OUTPUT HERE -->
-      <!-- <form method="POST" id = "download">
+    <div class="col-lg-7">
+      <h4 class="text-center mb-4">Output:</h4>
+      <div class="container">
+        <div class="card mb-2">
+          <div class="card-body text-center" id="empty_output">
+            Fill in the inputs and click the <i>Simulate</i> button.
+          </div>
+          <div class="card-body" id="output">
+            <div class="row">
+              <div class="col-6"><b>Total time</b> (load through, ns)</div>
+              <div class="col-6" id="total_time_lt">Answer</div>
+            </div>
+            <div class="row">
+              <div class="col-6"><b>Total time</b> (non load through, ns)</div>
+              <div class="col-6" id="total_time_nlt">Answer</div>
+            </div>
+            <div class="row">
+              <div class="col-6"><b>Average time</b> (ns)</div>
+              <div class="col-6" id="avg_time">Answer</div>
+            </div>
+            <div class="row">
+              <div class="col-6"><b>Hits</b></div>
+              <div class="col-6" id="hits">Answer</div>
+            </div>
+            <div class="row">
+              <div class="col-6"><b>Misses</b></div>
+              <div class="col-6" id="misses">Answer</div>
+            </div>
+            <div class="row">
+              <div class="col-6"><b>Hit rate</b></div>
+              <div class="col-6" id="hit_rate">Answer</div>
+            </div>
+            <div class="row">
+              <div class="col-6"><b>Miss penalty</b></div>
+              <div class="col-6" id="miss_penalty">Answer</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <form class="d-flex" action="{% url 'download' %}" name="download_form" id="downloadForm" method="POST" >
         {% csrf_token %}
-        <input type="hidden" id="download" name="download" value="download"/>
-        <input type="submit" value="Download" />
-      </form>  -->
-      <!-- <button id = 'download'>Download</button> -->
-      <form action="{% url 'download' %}" name="download_form" id="downloadForm" method="POST">
-        {% csrf_token %}
-        <input type="submit" id="download" value="download"/>
+        <input class="btn btn-primary mx-auto" type="submit" id="download" value="Download" />
       </form>
     </div>
   </div>
 </div>
-{% endblock %}
-{% block scripts %}
+
+{% endblock %} {% block scripts %}
 <script>
+
+  $('#output').hide();
+
   $("#inputForm").on("submit", function (event) {
     event.preventDefault();
 
     let serializedData = $(this).serialize();
     $.post("{% url 'perform' %}", serializedData, function (data) {
+      $('#empty_output').hide();
 
-      for (const key in data) {
-        console.log(key);
-        console.log(data[key]);
-        $('#output').append(`
-            <div class="d-flex row">
-                <div class="col-2">` + key + `: </div>
-                <div class="col-10">` + data[key] + `</div>
-            </div>
-        `);
-      }
-
+      $('#total_time_lt').html(data['total_time_lt']);
+      $('#total_time_nlt').html(data['total_time_nlt']);
+      $('#avg_time').html(data['avg_time']);
+      $('#hits').html(data['hits']);
+      $('#misses').html(data['misses']);
+      $('#hit_rate').html(data['hit_rate']);
+      $('#miss_penalty').html(data['miss_penalty']);
+      $('#output').show();
+      
       console.log(data);
-    })
-  }),
-  $("#download").on("click", function (event) {
-    // event.preventDefault()
-    $.get("{% url 'download' %}")
+    });
   });
 </script>
 {% endblock %}
