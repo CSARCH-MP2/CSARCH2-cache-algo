@@ -69,8 +69,8 @@ def perform_bsa_lru(request):
     debug=False)
   
   for i in range(iterations):
-    bs.hits = 0
-    bs.misses = 0
+    # bs.hits = 0
+    # bs.misses = 0
     if(i != 0):
       save.append('\n\n')
     save.append(f'Iteration: {i}'+'\n')

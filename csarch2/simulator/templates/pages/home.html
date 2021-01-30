@@ -66,7 +66,7 @@
           <div class="card-body text-center" id="empty_output">
             Fill in the inputs and click the <i>Simulate</i> button.
           </div>
-          <div class="card-body" id="output">
+          <div class="card-body" id="output" style="display: none">
             <div class="row">
               <div class="col-6"><b>Total time</b> (load through, ns)</div>
               <div class="col-6" id="total_time_lt">Answer</div>
@@ -80,19 +80,19 @@
               <div class="col-6" id="avg_time">Answer</div>
             </div>
             <div class="row">
-              <div class="col-6"><b>Hits</b></div>
+              <div class="col-6"><b>Hits</b> (cumulative)</div>
               <div class="col-6" id="hits">Answer</div>
             </div>
             <div class="row">
-              <div class="col-6"><b>Misses</b></div>
+              <div class="col-6"><b>Misses</b> (cumulative)</div>
               <div class="col-6" id="misses">Answer</div>
             </div>
             <div class="row">
-              <div class="col-6"><b>Hit rate</b></div>
+              <div class="col-6"><b>Hit rate</b> (%)</div>
               <div class="col-6" id="hit_rate">Answer</div>
             </div>
             <div class="row">
-              <div class="col-6"><b>Miss penalty</b></div>
+              <div class="col-6"><b>Miss penalty</b> (ns)</div>
               <div class="col-6" id="miss_penalty">Answer</div>
             </div>
           </div>
@@ -120,10 +120,10 @@
 
       $('#total_time_lt').html(data['total_time_lt']);
       $('#total_time_nlt').html(data['total_time_nlt']);
-      $('#avg_time').html(data['avg_time']);
+      $('#avg_time').html(data['avg_time'].toFixed(4));
       $('#hits').html(data['hits']);
       $('#misses').html(data['misses']);
-      $('#hit_rate').html(data['hit_rate']);
+      $('#hit_rate').html((data['hit_rate']*100).toFixed(4));
       $('#miss_penalty').html(data['miss_penalty']);
       $('#output').show();
       
