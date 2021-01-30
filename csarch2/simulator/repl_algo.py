@@ -67,10 +67,10 @@ class ReplAlgo:
     stats = stats + 'Total time (NLT):\t\t'+str(self.get_total_time_nlt())+ 'ns\n'
     print('Average time:\t\t\t', self.get_avg_time(), 'ns')
     stats =  stats + 'Average time:\t\t\t' + str(self.get_avg_time()) + 'ns\n'
-    print('Hits:\t\t\t\t', self.hits)
-    stats =  stats + 'Hits:\t\t\t\t' + str(self.hits) +'\n'
-    print('Misses:\t\t\t\t', self.misses)
-    stats =  stats + 'Misses:\t\t\t\t' + str(self.misses) + '\n'
+    print('Hits (cumulative):\t\t\t\t', self.hits)
+    stats =  stats + 'Hits (cumulative):\t\t\t\t' + str(self.hits) +'\n'
+    print('Misses (cumulative):\t\t\t\t', self.misses)
+    stats =  stats + 'Misses (cumulative):\t\t\t\t' + str(self.misses) + '\n'
     print('Hit Rate:\t\t\t', self.get_hit_rate() * 100, '%')
     stats = stats + 'Hit Rate:\t\t\t'+ str(self.get_hit_rate() * 100) +'%\n'
     print('Miss Rate:\t\t\t', (1 - self.get_hit_rate()) * 100, '%')

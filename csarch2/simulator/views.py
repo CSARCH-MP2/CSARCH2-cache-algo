@@ -68,9 +68,10 @@ def perform_bsa_lru(request):
     t_mem=t_mem,
     debug=False)
   
+  save.clear()
   for i in range(iterations):
-    bs.hits = 0
-    bs.misses = 0
+    # bs.hits = 0
+    # bs.misses = 0
     if(i != 0):
       save.append('\n\n')
     save.append(f'Iteration: {i}'+'\n')
@@ -85,7 +86,9 @@ def perform_bsa_lru(request):
     'hits': bs.hits,
     'misses': bs.misses,
     'hit_rate': bs.get_hit_rate(),
-    'miss_penalty': bs.get_miss_penalty()
+    'miss_penalty': bs.get_miss_penalty(),
+    'cache': bs.cache,
+    'n_blocks': bs.n_blocks
   }
 
   return JsonResponse(final_result)
