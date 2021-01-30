@@ -63,10 +63,15 @@
       <h4 class="text-center mb-4">Output:</h4>
       <div class="container">
         <div class="card mb-2">
-          <div class="card-body text-center" id="empty_output">
-            Fill in the inputs and click the <i>Simulate</i> button.
+          <div class="card-body" id="empty_output">
+            <div class="text-center">
+              Fill in the inputs and click the <i>Simulate</i> button.
+            </div>
             <br />
-            The results of the last iteration is displayed here. The complete breakdown of the iterations can be downloaded.
+            <div>
+              The results of the last iteration is displayed here, with floating point numbers rounded to four (4) decimal places. 
+              The complete breakdown of the iterations can be downloaded.
+            </div>
           </div>
           <div class="card-body" id="output" style="display: none">
             <div class="row">
@@ -122,10 +127,10 @@
 
       $('#total_time_lt').html(data['total_time_lt']);
       $('#total_time_nlt').html(data['total_time_nlt']);
-      $('#avg_time').html(data['avg_time'].toFixed(4));
+      $('#avg_time').html(Number(data['avg_time'].toFixed(4)));
       $('#hits').html(data['hits']);
       $('#misses').html(data['misses']);
-      $('#hit_rate').html((data['hit_rate']*100).toFixed(4));
+      $('#hit_rate').html(Number((data['hit_rate']*100).toFixed(4)));
       $('#miss_penalty').html(data['miss_penalty']);
       $('#output').show();
       $('#download').show();
