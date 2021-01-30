@@ -70,7 +70,7 @@
             <br />
             <div>
               The results of the last iteration is displayed here, with floating point numbers rounded to four (4) decimal places. 
-              The complete breakdown of the iterations can be downloaded.
+              The complete breakdown of the iterations, along with the visualization of the cache, can be downloaded as a text file.
             </div>
           </div>
           <div class="card-body" id="output" style="display: none">
@@ -98,9 +98,13 @@
               <div class="col-6"><b>Hit rate</b> (%)</div>
               <div class="col-6" id="hit_rate">Answer</div>
             </div>
-            <div class="row">
+            <div class="row mb-2">
               <div class="col-6"><b>Miss penalty</b> (ns)</div>
               <div class="col-6" id="miss_penalty">Answer</div>
+            </div>
+            <div class="row">
+              <b class="mb-2">Cache snapshot</b>
+              <div class="col-12" id="snapshot"></div>
             </div>
           </div>
         </div>
@@ -134,8 +138,42 @@
       $('#miss_penalty').html(data['miss_penalty']);
       $('#output').show();
       $('#download').show();
-      
+
       console.log(data);
+
+      for (const set_num in data['cache']) {
+        let table_data = ''
+
+        console.log(data['cache'][set_num]);
+
+        for (let i = 0; i < data['n_blocks']; i++) {
+          table_data += `
+            <tr>
+              <td>${i}</td>
+              <td>${data['cache'][set_num].age[i]}</td>
+              <td>${data['cache'][set_num].data[i] == null ? 'None' : data['cache'][set_num].data[i]}</td>
+            </tr>
+          `
+        };
+
+        $('#snapshot').append(`
+          <table class="table table-bordered">
+            <thead>
+              <tr>
+                <th colspan="4" id="set_num">Set ${set_num}</th>
+              </tr>
+              <tr>
+                <th scope="col">Block</th>
+                <th scope="col">Age</th>
+                <th scope="col">Data</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${table_data}
+            </tbody>
+          </table>
+        `);
+      }
     });
   });
 </script>
