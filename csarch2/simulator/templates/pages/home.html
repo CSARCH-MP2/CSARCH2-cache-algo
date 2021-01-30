@@ -100,7 +100,7 @@
       </div>
       <form class="d-flex" action="{% url 'download' %}" name="download_form" id="downloadForm" method="POST" >
         {% csrf_token %}
-        <input class="btn btn-primary mx-auto" type="submit" id="download" value="Download" />
+        <input class="btn btn-primary mx-auto" type="submit" id="download" value="Download" style="display: none" />
       </form>
     </div>
   </div>
@@ -126,6 +126,7 @@
       $('#hit_rate').html((data['hit_rate']*100).toFixed(4));
       $('#miss_penalty').html(data['miss_penalty']);
       $('#output').show();
+      $('#download').show();
       
       console.log(data);
     });
