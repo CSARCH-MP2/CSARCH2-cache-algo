@@ -1,8 +1,10 @@
 # Cache Simulator 
 * This is a simulator for the Replacement Algorithm for cache memory using the Least Recently Used Replacement Algorithm with Block Set Associative mapping.
+The following are the scope and limitations of the application:
   * This simulator can support sequential iterations but it cannot support sequentials with inner loops.
   * The Cache Snapshot presented in the WebApp is only the last iteration of the process. 
-    *The previous iterations can be found on a downloadable text file that will be available after calculation.
+  * The previous iterations can be found on a downloadable text file that will be available after calculation.
+  * This application only supports blocks as input and not memory addresses. 
 
 ## CSARCH S11 GROUP 8 Members:
 * Ang, Gwyneth
