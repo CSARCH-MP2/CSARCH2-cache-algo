@@ -5,13 +5,13 @@
     *The previous iterations can be found on a downloadable text file that will be available after calculation.
 
 ## CSARCH S11 GROUP 8 Members:
-* Matthew Walden Lua
-* Gwyneth Ang
-* Keith Badulis
-* Patrick Jaspher Joya
+* Ang, Gwyneth
+* Badulis, Keith
+* Joya, Patrick Jaspher
+* Lua, Matthew Walden
 
 ## Application Deployment
-* >> LINK <<
+* http://csarch2cachesimulator.herokuapp.com/
 
 ## Input
 * Cache Access Time (in nanoseconds)
