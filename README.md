@@ -18,6 +18,8 @@ The following are the scope and limitations of the application:
 ## Input
 * Cache Access Time (in nanoseconds)
 * Memory Access Time (in nanoseconds)
+* Main Memory Size
+* Cache Size
 * Set Size
 * Blocks per set
 * Block Sequence
