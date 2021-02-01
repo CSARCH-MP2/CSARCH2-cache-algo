@@ -223,6 +223,12 @@
         allValid = false;
         validBlockSequence = false;
         break;
+      } else if (parseInt(block) < 0) {
+        $('#input + label').html(`Negative numbers are not accepted.`);
+        $('#input + label').css('visibility', 'visible');
+        allValid = false;
+        validBlockSequence = false;
+        break;
       }
     }
     if (validBlockSequence) {
