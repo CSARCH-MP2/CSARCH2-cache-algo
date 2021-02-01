@@ -11,45 +11,66 @@
       <form name="input_form" id="inputForm" method="POST">
         {% csrf_token %}
         <div class="form-group row mb-2">
+          <label for="mm_size" class="col-sm-5 col-form-label">Main memory size (in blocks)</label>
+          <div class="col-sm-7">
+            <input type="number" class="form-control" id="mm_size" name="mm_size" min="1" required>
+            <label class="error_label" for="mm_size"></label>
+          </div>
+        </div>
+        <div class="form-group row mb-2">
+          <label for="cache_size" class="col-sm-5 col-form-label">Cache size (in blocks)</label>
+          <div class="col-sm-7">
+            <input type="number" class="form-control" id="cache_size" name="cache_size" min="1" required>
+            <label class="error_label" for="cache_size"></label>
+          </div>
+        </div>
+        <div class="form-group row mb-2">
           <label for="cache_access_time" class="col-sm-5 col-form-label">Cache access time (ns)</label>
           <div class="col-sm-7">
-            <input type="number" class="form-control" id="cache_access_time" name="cache_access_time" min="1" required>
+            <input type="number" class="form-control" id="cache_access_time" name="cache_access_time" min="1" step=".01" required>
+            <label class="error_label" for="cache_access_time"></label>
           </div>
         </div>
         <div class="form-group row mb-2">
           <label for="memory_access_time" class="col-sm-5 col-form-label">Memory access time (ns)</label>
           <div class="col-sm-7">
-            <input type="number" class="form-control" id="memory_access_time" name="memory_access_time" min="1" required>
+            <input type="number" class="form-control" id="memory_access_time" name="memory_access_time" min="1" step=".01" required>
+            <label class="error_label" for="memory_access_time"></label>
           </div>
         </div>
         <div class="form-group row mb-2">
           <label for="sets" class="col-sm-5 col-form-label">Number of sets</label>
           <div class="col-sm-7">
             <input type="number" class="form-control" id="sets" name="sets" min="1" required>
+            <label class="error_label" for="sets"></label>
           </div>
         </div>
         <div class="form-group row mb-2">
           <label for="blocks_per_set" class="col-sm-5 col-form-label">Blocks per set</label>
           <div class="col-sm-7">
             <input type="number" class="form-control" id="blocks_per_set" name="blocks_per_set" min="1" required>
+            <label class="error_label" for="blocks_per_set"></label>
           </div>
         </div>
         <div class="form-group row mb-2">
           <label for="words_per_block" class="col-sm-5 col-form-label">Words per block</label>
           <div class="col-sm-7">
             <input type="number" class="form-control" id="words_per_block" name="words_per_block" min="1" required>
+            <label class="error_label" for="words_per_block"></label>
           </div>
         </div>
         <div class="form-group row mb-2">
           <label for="input" class="col-sm-5 col-form-label">Block sequence</label>
           <div class="col-sm-7">
             <textarea id="input" name="input" class="form-control" rows="5" placeholder="Enter each value in separate lines" required></textarea>
+            <label class="error_label" for="input"></label>
           </div>
         </div>
         <div class="form-group row mb-2">
           <label for="iteration" class="col-sm-5 col-form-label">Number of sequence iterations</label>
           <div class="col-sm-7">
             <input type="number" class="form-control" id="iteration" name="iteration" min="1" value="1" required>
+            <label class="error_label" for="iteration"></label>
           </div>
         </div>
         <div class="d-flex mb-5">
@@ -121,61 +142,139 @@
 <script>
 
   $('#output').hide();
+  $('.error_label').css('visibility', 'hidden');
+  $('.error_label').css('color', 'red');
 
   $("#inputForm").on("submit", function (event) {
     event.preventDefault();
+    let allValid = true;   // TODO: change to TRUE
 
-    let serializedData = $(this).serialize();
-    $.post("{% url 'perform' %}", serializedData, function (data) {
-      $('#empty_output').hide();
+    let mmSize = Number($('#mm_size').val());
+    let cacheSize = Number($('#cache_size').val());
+    let cacheAccessTime = Number($('#cache_access_time').val());
+    let memAccessTime = Number($('#memory_access_time').val());
+    let sets = Number($('#sets').val());
+    let blocksPerSet = Number($('#blocks_per_set').val());
+    let wordsPerBlock = Number($('#words_per_block').val());
+    let input = $('#input').val().split('\n');
+    let iteration = Number($('#iteration').val());
 
-      $('#total_time_lt').html(data['total_time_lt']);
-      $('#total_time_nlt').html(data['total_time_nlt']);
-      $('#avg_time').html(Number(data['avg_time'].toFixed(4)));
-      $('#hits').html(data['hits']);
-      $('#misses').html(data['misses']);
-      $('#hit_rate').html(Number((data['hit_rate']*100).toFixed(4)));
-      $('#miss_penalty').html(data['miss_penalty']);
-      $('#output').show();
-      $('#download').show();
+    console.log(input);
+    if ((mmSize & (mmSize - 1)) != 0) {
+      $('#mm_size + label').html('Main memory size should be a power of 2.');
+      $('#mm_size + label').css('visibility', 'visible');
+      allValid = false;
+    } else {
+      $('#mm_size + label').css('visibility', 'hidden');
+    }
 
-      console.log(data);
+    if ((cacheSize & (cacheSize - 1)) != 0) {
+      $('#cache_size + label').html('Cache size should be a power of 2.');
+      $('#cache_size + label').css('visibility', 'visible');
+      allValid = false;
+    } else if (cacheSize > mmSize) {
+      $('#cache_size + label').html('Cache size should not be greater than the main memory size.');
+      $('#cache_size + label').css('visibility', 'visible');
+      allValid = false;
+    } else if (cacheSize / sets != blocksPerSet) {
+      $('#cache_size + label').html('Cache size should be equal to the number of blocks per set * number of sets.');
+      $('#cache_size + label').css('visibility', 'visible');
+      allValid = false;
+    } else {
+      $('#cache_size + label').css('visibility', 'hidden');
+    }
 
-      $('#snapshot').html('');
-      for (const set_num in data['cache']) {
-        let table_data = ''
+    if ((sets & (sets - 1)) != 0) {
+      $('#sets + label').html('Set size should be a power of 2.');
+      $('#sets + label').css('visibility', 'visible');
+      allValid = false;
+    } else {
+      $('#sets + label').css('visibility', 'hidden');
+    }
 
-        console.log(data['cache'][set_num]);
+    if ((blocksPerSet & (blocksPerSet - 1)) != 0) {
+      $('#blocks_per_set + label').html('Blocks per set should be a power of 2.');
+      $('#blocks_per_set + label').css('visibility', 'visible');
+      allValid = false;
+    } else {
+      $('#blocks_per_set + label').css('visibility', 'hidden');
+    }
 
-        for (let i = 0; i < data['n_blocks']; i++) {
-          table_data += `
-            <tr>
-              <td>${i}</td>
-              <td>${data['cache'][set_num].age[i]}</td>
-              <td>${data['cache'][set_num].data[i] == null ? 'None' : data['cache'][set_num].data[i]}</td>
-            </tr>
-          `
-        };
+    if ((wordsPerBlock & (wordsPerBlock - 1)) != 0) {
+      $('#words_per_block + label').html('Words per block should be a power of 2.');
+      $('#words_per_block + label').css('visibility', 'visible');
+      allValid = false;
+    } else {
+      $('#words_per_block + label').css('visibility', 'hidden');
+    }
 
-        $('#snapshot').append(`
-          <table class="table table-bordered">
-            <thead>
-              <tr>
-                <th colspan="4" id="set_num">Set ${set_num}</th>
-              </tr>
-              <tr>
-                <th scope="col">Block</th>
-                <th scope="col">Age</th>
-                <th scope="col">Data</th>
-              </tr>
-            </thead>
-            <tbody>
-              ${table_data}
-            </tbody>
-          </table>
-        `);
+    let validBlockSequence = true;
+    for (const block of input) {
+      console.log(parseInt(block));
+      if (isNaN(parseInt(block))) {
+        $('#input + label').html('Block sequence should consist of line separated numbers.');
+        $('#input + label').css('visibility', 'visible');
+        allValid = false;
+        validBlockSequence = false;
       }
-    });
+    }
+    if (validBlockSequence) {
+      $('#input + label').css('visibility', 'hidden');
+    }
+
+    if (allValid) {
+      $('.error_label').html('');
+      
+      let serializedData = $(this).serialize();
+      $.post("{% url 'perform' %}", serializedData, function (data) {
+        $('#empty_output').hide();
+
+        $('#total_time_lt').html(data['total_time_lt']);
+        $('#total_time_nlt').html(data['total_time_nlt']);
+        $('#avg_time').html(Number(data['avg_time'].toFixed(4)));
+        $('#hits').html(data['hits']);
+        $('#misses').html(data['misses']);
+        $('#hit_rate').html(Number((data['hit_rate']*100).toFixed(4)));
+        $('#miss_penalty').html(data['miss_penalty']);
+        $('#output').show();
+        $('#download').show();
+
+        $('#snapshot').html('');
+        for (const set_num in data['cache']) {
+          let table_data = ''
+
+          console.log(data['cache'][set_num]);
+
+          for (let i = 0; i < data['n_blocks']; i++) {
+            table_data += `
+              <tr>
+                <td>${i}</td>
+                <td>${data['cache'][set_num].age[i]}</td>
+                <td>${data['cache'][set_num].data[i] == null ? 'None' : data['cache'][set_num].data[i]}</td>
+              </tr>
+            `
+          };
+
+          $('#snapshot').append(`
+            <table class="table table-bordered">
+              <thead>
+                <tr>
+                  <th colspan="4" id="set_num">Set ${set_num}</th>
+                </tr>
+                <tr>
+                  <th scope="col">Block</th>
+                  <th scope="col">Age</th>
+                  <th scope="col">Data</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${table_data}
+              </tbody>
+            </table>
+          `);
+        }
+      });
+    }
   });
 </script>
 {% endblock %}
