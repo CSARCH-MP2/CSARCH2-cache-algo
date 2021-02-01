@@ -216,6 +216,13 @@
         $('#input + label').css('visibility', 'visible');
         allValid = false;
         validBlockSequence = false;
+        break;
+      } else if (parseInt(block) >= mmSize) {
+        $('#input + label').html(`Blocks should be from 0 to ${mmSize-1} (based on main memory size).`);
+        $('#input + label').css('visibility', 'visible');
+        allValid = false;
+        validBlockSequence = false;
+        break;
       }
     }
     if (validBlockSequence) {
