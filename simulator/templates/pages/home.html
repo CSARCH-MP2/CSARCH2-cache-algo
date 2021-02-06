@@ -39,13 +39,6 @@
           </div>
         </div>
         <div class="form-group row mb-2">
-          <label for="sets" class="col-sm-5 col-form-label">Number of sets</label>
-          <div class="col-sm-7">
-            <input type="number" class="form-control" id="sets" name="sets" min="1" required>
-            <label class="error_label" for="sets"></label>
-          </div>
-        </div>
-        <div class="form-group row mb-2">
           <label for="blocks_per_set" class="col-sm-5 col-form-label">Blocks per set</label>
           <div class="col-sm-7">
             <input type="number" class="form-control" id="blocks_per_set" name="blocks_per_set" min="1" required>
@@ -176,27 +169,19 @@
       $('#cache_size + label').html('Cache size should not be greater than the main memory size.');
       $('#cache_size + label').css('visibility', 'visible');
       allValid = false;
-    } else if (cacheSize / sets != blocksPerSet) {
-      $('#cache_size + label').html('Cache size should be equal to the number of blocks per set * number of sets.');
-      $('#cache_size + label').css('visibility', 'visible');
-      allValid = false;
     } else {
       $('#cache_size + label').css('visibility', 'hidden');
-    }
-
-    if ((sets & (sets - 1)) != 0) {
-      $('#sets + label').html('Set size should be a power of 2.');
-      $('#sets + label').css('visibility', 'visible');
-      allValid = false;
-    } else {
-      $('#sets + label').css('visibility', 'hidden');
     }
 
     if ((blocksPerSet & (blocksPerSet - 1)) != 0) {
       $('#blocks_per_set + label').html('Blocks per set should be a power of 2.');
       $('#blocks_per_set + label').css('visibility', 'visible');
       allValid = false;
-    } else {
+    } else if(blocksPerSet > cacheSize){
+      $('#blocks_per_set + label').html('Blocks per set should not be greater than cache size');
+      $('#blocks_per_set + label').css('visibility', 'visible');
+      allValid = false;
+    }else {
       $('#blocks_per_set + label').css('visibility', 'hidden');
     }
 
