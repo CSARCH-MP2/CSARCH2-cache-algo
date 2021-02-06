@@ -1,0 +1,278 @@
+{% extends '../partials/base.html' %} {% load static %} {% block body %}
+<nav class="navbar navbar-dark bg-primary">
+  <div class="container-fluid">
+    <span class="navbar-brand">Block Set Associative - LRU</span>
+  </div>
+</nav>
+<br />
+<div class="container-fluid">
+  <div class="d-flex row">
+    <div class="col-lg-5">
+      <form name="input_form" id="inputForm" method="POST">
+        {% csrf_token %}
+        <div class="form-group row mb-2">
+          <label for="mm_size" class="col-sm-5 col-form-label">Main memory size (in blocks)</label>
+          <div class="col-sm-7">
+            <input type="number" class="form-control" id="mm_size" name="mm_size" min="1" required>
+            <label class="error_label" for="mm_size"></label>
+          </div>
+        </div>
+        <div class="form-group row mb-2">
+          <label for="cache_size" class="col-sm-5 col-form-label">Cache size (in blocks)</label>
+          <div class="col-sm-7">
+            <input type="number" class="form-control" id="cache_size" name="cache_size" min="1" required>
+            <label class="error_label" for="cache_size"></label>
+          </div>
+        </div>
+        <div class="form-group row mb-2">
+          <label for="cache_access_time" class="col-sm-5 col-form-label">Cache access time (ns)</label>
+          <div class="col-sm-7">
+            <input type="number" class="form-control" id="cache_access_time" name="cache_access_time" min="1" required>
+            <label class="error_label" for="cache_access_time"></label>
+          </div>
+        </div>
+        <div class="form-group row mb-2">
+          <label for="memory_access_time" class="col-sm-5 col-form-label">Memory access time (ns)</label>
+          <div class="col-sm-7">
+            <input type="number" class="form-control" id="memory_access_time" name="memory_access_time" min="1" required>
+            <label class="error_label" for="memory_access_time"></label>
+          </div>
+        </div>
+        <div class="form-group row mb-2">
+          <label for="blocks_per_set" class="col-sm-5 col-form-label">Blocks per set</label>
+          <div class="col-sm-7">
+            <input type="number" class="form-control" id="blocks_per_set" name="blocks_per_set" min="1" required>
+            <label class="error_label" for="blocks_per_set"></label>
+          </div>
+        </div>
+        <div class="form-group row mb-2">
+          <label for="words_per_block" class="col-sm-5 col-form-label">Words per block</label>
+          <div class="col-sm-7">
+            <input type="number" class="form-control" id="words_per_block" name="words_per_block" min="1" required>
+            <label class="error_label" for="words_per_block"></label>
+          </div>
+        </div>
+        <div class="form-group row mb-2">
+          <label for="input" class="col-sm-5 col-form-label">Block sequence</label>
+          <div class="col-sm-7">
+            <textarea id="input" name="input" class="form-control" rows="5" placeholder="Enter each value in separate lines" required></textarea>
+            <label class="error_label" for="input"></label>
+          </div>
+        </div>
+        <div class="form-group row mb-2">
+          <label for="iteration" class="col-sm-5 col-form-label">Number of sequence iterations</label>
+          <div class="col-sm-7">
+            <input type="number" class="form-control" id="iteration" name="iteration" min="1" value="1" required>
+            <label class="error_label" for="iteration"></label>
+          </div>
+        </div>
+        <div class="d-flex mb-5">
+          <button class="btn btn-primary mx-auto" type="submit" id="submitBtn" name="submit_btn">
+            Simulate
+          </button>
+        </div>
+      </form>
+    </div>
+    <div class="col-lg-7">
+      <h4 class="text-center mb-4">Output:</h4>
+      <div class="container">
+        <div class="card mb-2">
+          <div class="card-body" id="empty_output">
+            <div class="text-center">
+              Fill in the inputs and click the <i>Simulate</i> button.
+            </div>
+            <br />
+            <div>
+              The results of the last iteration is displayed here, with floating point numbers rounded to four (4) decimal places. 
+              The complete breakdown of the iterations, along with the visualization of the cache, can be downloaded as a text file.
+            </div>
+          </div>
+          <div class="card-body" id="output" style="display: none">
+            <div class="row">
+              <div class="col-6"><b>Total time</b> (load through, ns)</div>
+              <div class="col-6" id="total_time_lt">Answer</div>
+            </div>
+            <div class="row">
+              <div class="col-6"><b>Total time</b> (non load through, ns)</div>
+              <div class="col-6" id="total_time_nlt">Answer</div>
+            </div>
+            <div class="row">
+              <div class="col-6"><b>Average time</b> (ns)</div>
+              <div class="col-6" id="avg_time">Answer</div>
+            </div>
+            <div class="row">
+              <div class="col-6"><b>Hits</b> (cumulative)</div>
+              <div class="col-6" id="hits">Answer</div>
+            </div>
+            <div class="row">
+              <div class="col-6"><b>Misses</b> (cumulative)</div>
+              <div class="col-6" id="misses">Answer</div>
+            </div>
+            <div class="row">
+              <div class="col-6"><b>Hit rate</b> (%)</div>
+              <div class="col-6" id="hit_rate">Answer</div>
+            </div>
+            <div class="row mb-2">
+              <div class="col-6"><b>Miss penalty</b> (ns)</div>
+              <div class="col-6" id="miss_penalty">Answer</div>
+            </div>
+            <div class="row">
+              <b class="mb-2">Cache snapshot</b>
+              <div class="col-12" id="snapshot"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <form class="d-flex" action="{% url 'download' %}" name="download_form" id="downloadForm" method="POST" >
+        {% csrf_token %}
+        <input class="btn btn-primary mx-auto" type="submit" id="download" value="Download" style="display: none" />
+      </form>
+    </div>
+  </div>
+</div>
+
+{% endblock %} {% block scripts %}
+<script>
+
+  $('#output').hide();
+  $('.error_label').css('visibility', 'hidden');
+  $('.error_label').css('color', 'red');
+
+  $("#inputForm").on("submit", function (event) {
+    event.preventDefault();
+    let allValid = true;   // TODO: change to TRUE
+
+    let mmSize = Number($('#mm_size').val());
+    let cacheSize = Number($('#cache_size').val());
+    let cacheAccessTime = Number($('#cache_access_time').val());
+    let memAccessTime = Number($('#memory_access_time').val());
+    let sets = Number($('#sets').val());
+    let blocksPerSet = Number($('#blocks_per_set').val());
+    let wordsPerBlock = Number($('#words_per_block').val());
+    let input = $('#input').val().split('\n');
+    let iteration = Number($('#iteration').val());
+
+    console.log(input);
+    if ((mmSize & (mmSize - 1)) != 0) {
+      $('#mm_size + label').html('Main memory size should be a power of 2.');
+      $('#mm_size + label').css('visibility', 'visible');
+      allValid = false;
+    } else {
+      $('#mm_size + label').css('visibility', 'hidden');
+    }
+
+    if ((cacheSize & (cacheSize - 1)) != 0) {
+      $('#cache_size + label').html('Cache size should be a power of 2.');
+      $('#cache_size + label').css('visibility', 'visible');
+      allValid = false;
+    } else if (cacheSize > mmSize) {
+      $('#cache_size + label').html('Cache size should not be greater than the main memory size.');
+      $('#cache_size + label').css('visibility', 'visible');
+      allValid = false;
+    } else {
+      $('#cache_size + label').css('visibility', 'hidden');
+    }
+
+    if ((blocksPerSet & (blocksPerSet - 1)) != 0) {
+      $('#blocks_per_set + label').html('Blocks per set should be a power of 2.');
+      $('#blocks_per_set + label').css('visibility', 'visible');
+      allValid = false;
+    } else if(blocksPerSet > cacheSize){
+      $('#blocks_per_set + label').html('Blocks per set should not be greater than cache size');
+      $('#blocks_per_set + label').css('visibility', 'visible');
+      allValid = false;
+    }else {
+      $('#blocks_per_set + label').css('visibility', 'hidden');
+    }
+
+    if ((wordsPerBlock & (wordsPerBlock - 1)) != 0) {
+      $('#words_per_block + label').html('Words per block should be a power of 2.');
+      $('#words_per_block + label').css('visibility', 'visible');
+      allValid = false;
+    } else {
+      $('#words_per_block + label').css('visibility', 'hidden');
+    }
+
+    let validBlockSequence = true;
+    for (const block of input) {
+      console.log(parseInt(block));
+      if (isNaN(parseInt(block))) {
+        $('#input + label').html('Block sequence should consist of line separated numbers.');
+        $('#input + label').css('visibility', 'visible');
+        allValid = false;
+        validBlockSequence = false;
+        break;
+      } else if (parseInt(block) >= mmSize) {
+        $('#input + label').html(`Blocks should be from 0 to ${mmSize-1} (based on main memory size).`);
+        $('#input + label').css('visibility', 'visible');
+        allValid = false;
+        validBlockSequence = false;
+        break;
+      } else if (parseInt(block) < 0) {
+        $('#input + label').html(`Negative numbers are not accepted.`);
+        $('#input + label').css('visibility', 'visible');
+        allValid = false;
+        validBlockSequence = false;
+        break;
+      }
+    }
+    if (validBlockSequence) {
+      $('#input + label').css('visibility', 'hidden');
+    }
+
+    if (allValid) {
+      $('.error_label').html('');
+
+      let serializedData = $(this).serialize();
+      $.post("{% url 'perform' %}", serializedData, function (data) {
+        $('#empty_output').hide();
+
+        $('#total_time_lt').html(data['total_time_lt']);
+        $('#total_time_nlt').html(data['total_time_nlt']);
+        $('#avg_time').html(Number(data['avg_time'].toFixed(4)));
+        $('#hits').html(data['hits']);
+        $('#misses').html(data['misses']);
+        $('#hit_rate').html(Number((data['hit_rate']*100).toFixed(4)));
+        $('#miss_penalty').html(data['miss_penalty']);
+        $('#output').show();
+        $('#download').show();
+
+        $('#snapshot').html('');
+        for (const set_num in data['cache']) {
+          let table_data = ''
+
+          console.log(data['cache'][set_num]);
+
+          for (let i = 0; i < data['n_blocks']; i++) {
+            table_data += `
+              <tr>
+                <td>${i}</td>
+                <td>${data['cache'][set_num].age[i]}</td>
+                <td>${data['cache'][set_num].data[i] == null ? 'None' : data['cache'][set_num].data[i]}</td>
+              </tr>
+            `
+          };
+
+          $('#snapshot').append(`
+            <table class="table table-bordered">
+              <thead>
+                <tr>
+                  <th colspan="4" id="set_num">Set ${set_num}</th>
+                </tr>
+                <tr>
+                  <th scope="col">Block</th>
+                  <th scope="col">Age</th>
+                  <th scope="col">Data</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${table_data}
+              </tbody>
+            </table>
+          `);
+        }
+      });
+    }
+  });
+</script>
+{% endblock %}
