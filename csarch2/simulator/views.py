@@ -53,8 +53,9 @@ def index(request):
 def perform_bsa_lru(request):
   t_cache          = int(request.POST.get('cache_access_time'))
   t_mem            = int(request.POST.get('memory_access_time'))
-  sets             = int(request.POST.get('sets'))
+  cache_size       = int(request.POST.get('cache_size'))
   n_blocks_per_set = int(request.POST.get('blocks_per_set'))
+  sets             = int(int(cache_size)/int(n_blocks_per_set))
   words_per_block  = int(request.POST.get('words_per_block'))
   num_list         = request.POST.get('input').splitlines()
   num_list         = [int(i) for i in num_list] #convert all to int
